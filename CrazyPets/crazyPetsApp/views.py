@@ -3,6 +3,7 @@
 import random
 import subprocess
 import django_filters
+from decimal import Decimal, ROUND_HALF_UP, ROUND_HALF_EVEN
 from rest_framework import viewsets, filters
 from rest_framework.response import Response
 from django.http import HttpResponse
@@ -19,9 +20,10 @@ class PetViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         pet_param_dict_list = list()
+        score_dict = {}
         # while True:
-        for i in range(5):
-            score_dict = {}
+        for i in range(30):
+            
             pet_param_dict = {
                 "mouth_x" : random.random(),
                 "mouth_y" : random.random(),
@@ -34,13 +36,27 @@ class PetViewSet(viewsets.ModelViewSet):
                 "score" : 0,
             }
             # pythonファイルを叩く
-            # subprocess.check_call(['python','./yacchi/scripts/main.py'])
-            score = i
-            pet_param_dict["score"] = score
+            try:
+                res = subprocess.check_output(["python3.6 ./crazyPetsApp/scripts/predict.py " + str(pet_param_dict["eye_left_x"]) + " " + str(pet_param_dict["eye_left_y"]) + " " + str(pet_param_dict["eye_right_x"]) + " " + str(pet_param_dict["eye_right_y"]) + " " + str(pet_param_dict["nose_x"]) + " " + str(pet_param_dict["nose_y"]) + " " + str(pet_param_dict["mouth_x"]) + " " + str(pet_param_dict["mouth_y"])],shell=True)
+                res = res.decode("utf-8") # resはバイナリ形式なのでデコードする
+                print(res) # ここでは2を得る
+                score_str = str(Decimal(str(res)).quantize(Decimal('0'), rounding=ROUND_HALF_UP))
+                print(score_str)
+            except:
+                print("エラー")
+            # score = i
+            pet_param_dict["score"] = score_str
 
-            if (score not in score_dict):
-                score_dict[score] = score
+            if (score_str == "0"):
+                continue
+
+            if (score_str not in score_dict):
+                print(score_str)
+                score_dict[score_str] = score_str
                 pet_param_dict_list.append(pet_param_dict)
+            
+            if (len(score_dict) == 5) :
+                break
         
         return HttpResponse(json.dumps(pet_param_dict_list))
 
