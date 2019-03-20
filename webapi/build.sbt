@@ -6,6 +6,7 @@ libraryDependencies ++= {
     "com.typesafe.akka" %% "akka-stream" % "2.5.19",
     "com.typesafe.akka" %% "akka-http-spray-json" % "10.1.7",
     "io.spray" %%  "spray-json" % "1.3.5",
-    "com.github.tototoshi" %% "scala-csv" % "1.3.5"
+    "com.github.tototoshi" %% "scala-csv" % "1.3.5",
+    "com.lihaoyi" %% "requests" % "0.1.7"
   )
 }
