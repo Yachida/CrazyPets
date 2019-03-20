@@ -14,7 +14,7 @@ trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
   implicit val petFaceFormat = jsonFormat9(PetFace.apply)
 }
 
-object Sample extends JsonSupport {
+object Main extends JsonSupport {
   def main(args: Array[String]) = {
     implicit val system = ActorSystem("my-system")
     implicit val materializer = ActorMaterializer()
@@ -24,7 +24,9 @@ object Sample extends JsonSupport {
       path("pet") {
         get {
           val v = PetFace(0,0,0,0,0,0,0,0,0)
-          complete(v)
+          complete(
+            Seq(v, v, v, v, v)
+          )
         }
       } ~
       path("pet") {
