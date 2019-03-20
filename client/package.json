@@ -2,7 +2,7 @@
   "name": "yachida2018",
   "version": "1.0.0",
   "description": "",
-  "main": "public/train.js",
+  "main": "public/scripts/train.js",
   "scripts": {
     "server": "npx http-server public -c1",
     "livereload": "npx livereload public"

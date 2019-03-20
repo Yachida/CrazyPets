@@ -1,9 +1,4 @@
-function outputPoints() {
-  const row = () => new Array(8).fill(0).map(() => Math.random()).join(",");
-  const columns = new Array(300).fill(0).map(row).join("\n");
-  console.log(columns);
-}
-
+// mockGenerate.jsのoutputCSVを加工して作った二次元配列
 const points = [
   [0.5847740379738793, 0.06787559418353917, 0.45983576094296774, 0.22721175802370408, 0.3359362009842546, 0.6692813357864578, 0.5861357937782121, 0.3480523099480102],
   [0.39008410870497445, 0.07288732027128275, 0.5035407476170826, 0.4647071234502922, 0.2944280790413263, 0.003653554842046214, 0.06035521848302716, 0.42782060899777696],
@@ -308,17 +303,24 @@ const points = [
 ];
 
 
-window.addEventListener("load", () => {
-  renderImages();
-});
-
 function renderImages() {
-  for (let i = 0; i <  300; i++) {
-    renderImage(i);
-  }
+  points.forEach((row, i) => {
+    const data = {
+      eye_left_x: row[0],
+      eye_left_y: row[1],
+      eye_right_x: row[2],
+      eye_right_y: row[3],
+      nose_x: row[4],
+      nose_y: row[5],
+      mouth_x: row[6],
+      mouth_y: row[7],
+      score: 0
+    };
+    renderImage(data, i);
+  });
 }
 
-function renderImage(index) {
+function renderImage(data, index) {
   const div = document.createElement('div');
   div.style.height = '400px';
   div.style.position = 'relative';
@@ -329,45 +331,12 @@ function renderImage(index) {
   divIndex.style.fontSize = '30px';
   divIndex.textContent = index + 1;
 
-
-  const base = document.createElement('img');
-  base.src = './img/base.png';
-
-  const eyeLeft = document.createElement('img');
-  eyeLeft.src = './img/eye_left.png';
-  eyeLeft.style.position = 'absolute';
-  eyeLeft.style.zIndex = '2';
-  eyeLeft.style.left = String(points[index][0] * 300);
-  eyeLeft.style.top = String(points[index][1] * 300);
-
-  const eyeRight = document.createElement('img');
-  eyeRight.src = './img/eye_right.png';
-  eyeRight.style.position = 'absolute';
-  eyeRight.style.zIndex = '2';
-  eyeRight.style.left = String(points[index][2] * 300);
-  eyeRight.style.top = String(points[index][3] * 300);
-
-  const nose = document.createElement('img');
-  nose.src = './img/nose.png';
-  nose.style.position = 'absolute';
-  nose.style.zIndex = '2';
-  nose.style.left = String(points[index][4] * 300);
-  nose.style.top = String(points[index][5] * 300);
-
-  const mouth = document.createElement('img');
-  mouth.src = './img/mouth.png';
-  mouth.style.position = 'absolute';
-  mouth.style.zIndex = '2';
-  mouth.style.left = String(points[index][6] * 160);
-  mouth.style.top = String(points[index][7] * 320);
-
+  const creatureDOM = CreatureDOM(data);
+  creatureDOM.style.marginLeft = '60px';
+  creatureDOM.style.marginTop = '40px';
 
   div.appendChild(divIndex);
-  div.appendChild(base);
-  div.appendChild(eyeLeft);
-  div.appendChild(eyeRight);
-  div.appendChild(nose);
-  div.appendChild(mouth);
+  div.appendChild(creatureDOM);
   document.getElementsByTagName('body')[0].appendChild(div);
 }
 
@@ -392,3 +361,10 @@ function updatePart(id, left, top) {
   part.style.top = top;
 }
 
+
+/* ====== Main ====== */
+
+window.addEventListener("load", () => {
+  // outputCSV();
+  renderImages();
+});
