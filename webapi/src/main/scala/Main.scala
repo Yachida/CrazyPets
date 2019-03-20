@@ -24,7 +24,9 @@ trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
 }
 
 object Main extends JsonSupport {
-  val CSV_FILE = "/var/hoge.csv"
+
+  // 書き込み対象となるCSVファイルのパス
+  val CSV_FILE_PATH = "/tmp/crazypet.csv"
 
   def main(args: Array[String]) = {
     implicit val system = ActorSystem("my-system")
@@ -43,7 +45,7 @@ object Main extends JsonSupport {
         post {
           entity(as[Seq[PetFace]]) { request =>
             Try {
-              val writer = CSVWriter.open(new File("/var/hoge.csv"), append = true)
+              val writer = CSVWriter.open(new File(CSV_FILE_PATH), append = true)
               request.foreach(r => writer.writeRow(r.toList))
               writer.close()
             } match {
