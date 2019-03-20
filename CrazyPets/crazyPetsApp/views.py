@@ -5,6 +5,7 @@ import subprocess
 import django_filters
 from rest_framework import viewsets, filters
 from rest_framework.response import Response
+from django.http import HttpResponse
 
 import json
 
@@ -33,7 +34,7 @@ class PetViewSet(viewsets.ModelViewSet):
                 "score" : 0,
             }
             # pythonファイルを叩く
-            # subprocess.check_call(['python','error.py'])
+            # subprocess.check_call(['python','./yacchi/scripts/main.py'])
             score = i
             pet_param_dict["score"] = score
 
@@ -41,7 +42,8 @@ class PetViewSet(viewsets.ModelViewSet):
                 score_dict[score] = score
                 pet_param_dict_list.append(pet_param_dict)
         
-        return Response(json.dumps(pet_param_dict_list))
+        return HttpResponse(json.dumps(pet_param_dict_list))
+
 
 class PetsViewSet(viewsets.ModelViewSet):
     queryset = Pets.objects.all()
