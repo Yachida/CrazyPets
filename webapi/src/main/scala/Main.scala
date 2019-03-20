@@ -6,9 +6,8 @@ import spray.json.DefaultJsonProtocol
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import scala.io.StdIn
 
-case class PetFace(eyeLeftX: Float, eyeLeftY: Float, eyeRightX: Float,
-                   eyeRightY: Float, noseX: Float, noseY: Float, mouthX: Float,
-                   mouthY: Float, score: Float)
+case class PetFace(eye_left_x: Float, eye_left_y: Float, eye_right_x: Float, eye_right_y: Float,
+                   nose_x: Float, nose_y: Float, mouth_x: Float, mouth_y: Float, score: Float)
 
 trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
   implicit val petFaceFormat = jsonFormat9(PetFace.apply)
@@ -31,7 +30,9 @@ object Main extends JsonSupport {
       } ~
       path("pet") {
         post {
-          complete("POST hoge")
+          entity(as[Seq[PetFace]]) { request =>
+            complete("POST hoge")
+          }
         }
       }
 
