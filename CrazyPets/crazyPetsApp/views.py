@@ -75,7 +75,7 @@ class PetViewSet(viewsets.ModelViewSet):
             except:
                 print("エラー")
 
-            pet_param_dict["score"] = score_str
+            pet_param_dict["score"] = int(score_str)
 
             if (score_str == "0"):
                 continue
