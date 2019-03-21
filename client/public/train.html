@@ -21,7 +21,8 @@
       url: 'http://crazy-pets.grouchydev.io/api',
       type: 'GET'
     }).done((data) => {
-      window.gotData = JSON.parse(data);
+	console.log("rowdata is", data);    
+      window.gotData = data;
     }).fail((e) => {
       console.log('通信エラー', e)
     })
@@ -41,8 +42,5 @@
 <script src="scripts/mockGenerate.js"></script>
 <script src="scripts/creature.js"></script>
 <script src="scripts/train.js"></script>
-<script>
-  document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')
-</script>
 </body>
 </html>

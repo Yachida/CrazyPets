@@ -32,10 +32,12 @@ function renderTrain() {
           return {...data, rank: 5 - i}
         });
 
+    console.log("send-data-content", dataForSend);
     $.ajax({
       url: 'http://crazy-pets.grouchydev.io/api',
       type: 'post',
-      data: dataForSend
+      contentType: "application/json",
+      data: JSON.stringify(dataForSend)
     })
       .done(() => {
         console.log('送信完了！')
@@ -51,7 +53,7 @@ function renderTrain() {
 
     setTimeout(() => {
       location.href = 'thanks.html';
-    }, 100000)
+    }, 2000)
   }
 }
 

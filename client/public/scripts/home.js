@@ -24,11 +24,11 @@ function renderHome() {
 
 
 
-  const topJson =
-    JSON.parse(window.gotData)
-      .filter(data => data.rank);
+  const targetJson =
+    window.gotData
+      .filter(data => data.score === targetRank)[0];
 
-  const creature = !!topJson ? CreatureDOM(JSON.parse(topJson)) : document.createElement('div');
+  const creature = !!targetJson ? CreatureDOM(targetJson) : document.createElement('div');
 
   document.getElementById('container').appendChild(creature);
 }
