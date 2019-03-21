@@ -39,35 +39,41 @@ object Main extends JsonSupport {
     implicit val executionContext = system.dispatcher
     val logger = Logging(system, getClass)
 
+
+    logger.info(s"CSV_FILE_PATH: ${CSV_FILE_PATH}")
+    logger.info(s"ML_ENDPOINT: ${ML_ENDPOINT}")
+
     val route =
-      path("pet") {
-        get {
-          Try {
-            val response = requests.get(ML_ENDPOINT)
-            val source = response.text
-            source.parseJson.convertTo[Seq[PetFace]]
-          } match {
-            case Success(petFaces) => complete(petFaces)
-            case Failure(e) => failWith(e)
-          }
-        }
-      } ~
-      path("pet") {
-        post {
-          entity(as[Seq[PetFace]]) { request =>
+      ignoreTrailingSlash {
+        path("api") {
+          get {
             Try {
-              val writer = CSVWriter.open(new File(CSV_FILE_PATH), append = true)
-              request.foreach(r => {
-                writer.writeRow(r.toList)
-                logger.info(s"CSV written: ${r.toList.toString}")
-              })
-              writer.close()
+              val response = requests.get(ML_ENDPOINT)
+              val source = response.text
+              source.parseJson.convertTo[Seq[PetFace]]
             } match {
-              case Success(_) => complete("ok")
+              case Success(petFaces) => complete(petFaces)
               case Failure(e) => failWith(e)
             }
           }
-        }
+        } ~
+          path("api") {
+            post {
+              entity(as[Seq[PetFace]]) { request =>
+                Try {
+                  val writer = CSVWriter.open(new File(CSV_FILE_PATH), append = true)
+                  request.foreach(r => {
+                    writer.writeRow(r.toList)
+                    logger.info(s"CSV written: ${r.toList.toString}")
+                  })
+                  writer.close()
+                } match {
+                  case Success(_) => complete("ok")
+                  case Failure(e) => failWith(e)
+                }
+              }
+            }
+          }
       }
 
 
