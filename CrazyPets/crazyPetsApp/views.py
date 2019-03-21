@@ -19,23 +19,52 @@ class PetViewSet(viewsets.ModelViewSet):
     serializer_class = PetSerializer
 
     def list(self, request, *args, **kwargs):
+        path = './crazyPetsApp/input/train.csv'
+        f = open(path)
+        array_param = []
+        array_param_split = []
+        count = 1
+        
+        line = f.readline()
+        while line:
+            array_param_split = line.split(",")
+            if (count == 1) :
+                count = count + 1
+                line = f.readline()
+                continue
+            if (array_param_split[8] == "5\n") :
+                array_param.append(array_param_split)
+            
+            array_param_split = []
+            line = f.readline()
+        
+        array_param_split = array_param[int(random.uniform(1,len(array_param)))]
         pet_param_dict_list = list()
         score_dict = {}
         # while True:
         for i in range(30):
             if ("5" not in score_dict) :
                 pet_param_dict = {
-                    "mouth_x" : random.uniform(0.2582094576, 0.3182094576),
-                    "mouth_y" : random.uniform(0.2081635821, 0.2682094576),
-                    "eye_right_x" : random.uniform(0.8222340154 , 0.8722340154),
-                    "eye_right_y" : random.uniform(0.1859935329 , 0.2622340154),
-                    "eye_left_x" : random.uniform(0.4520359972 , 0.5122340154),
-                    "eye_left_y" : random.uniform(0.4767183779 , 0.5322340154),
-                    "nose_x" : random.uniform(0.4580032295 , 0.5180032295),
-                    "nose_y" : random.uniform(0.8338197435 , 0.8922340154),
+                    # "mouth_x" : random.uniform(float(array_param_split[6]) - 0.01 , float(array_param_split[6]) + 0.01),
+                    # "mouth_y" : random.uniform(float(array_param_split[7]) - 0.01 , float(array_param_split[7]) + 0.01),
+                    # "eye_right_x" : random.uniform(float(array_param_split[2]) - 0.01 , float(array_param_split[2]) + 0.01),
+                    # "eye_right_y" : random.uniform(float(array_param_split[3]) - 0.01 , float(array_param_split[3]) + 0.01),
+                    # "eye_left_x" : random.uniform(float(array_param_split[0]) - 0.01 , float(array_param_split[0]) + 0.01),
+                    # "eye_left_y" : random.uniform(float(array_param_split[1]) - 0.01 , float(array_param_split[1]) + 0.01),
+                    # "nose_x" : random.uniform(float(array_param_split[4]) - 0.01 , float(array_param_split[4]) + 0.01),
+                    # "nose_y" : random.uniform(float(array_param_split[5]) - 0.01 , float(array_param_split[5]) + 0.01),
+                    # "score" : 0,
+                    "mouth_x" : float(array_param_split[6]),
+                    "mouth_y" : float(array_param_split[7]),
+                    "eye_right_x" : float(array_param_split[2]),
+                    "eye_right_y" : float(array_param_split[3]),
+                    "eye_left_x" : float(array_param_split[0]),
+                    "eye_left_y" : float(array_param_split[1]),
+                    "nose_x" : float(array_param_split[4]),
+                    "nose_y" : float(array_param_split[5]),
                     "score" : 0,
                 }
-                print("5通ったよ")
+                print("まだ5")
             # elif ("1" not in score_dict) :
             #     pet_param_dict = {
             #         "eye_left_x" : random.uniform(0.4378189111 , 0.4778189111),
@@ -61,13 +90,14 @@ class PetViewSet(viewsets.ModelViewSet):
                     "nose_y" : random.random(),
                     "score" : 0,
                 }
-                print("それ以外通ったよ")
 
             # pythonファイルを叩く
             try:
-                res = subprocess.check_output(["python3.6 ./crazyPetsApp/scripts/predict.py " + str(pet_param_dict["mouth_x"]) + " " + str(pet_param_dict["mouth_y"]) + " " + str(pet_param_dict["eye_right_x"]) + " " + str(pet_param_dict["eye_right_y"]) + " " + str(pet_param_dict["eye_left_x"]) + " " + str(pet_param_dict["eye_left_y"]) + " " + str(pet_param_dict["nose_x"]) + " " + str(pet_param_dict["nose_y"])],shell=True)
+                # res = subprocess.check_output(["python ./crazyPetsApp/scripts/predict.py " + str(pet_param_dict["mouth_x"]) + " " + str(pet_param_dict["mouth_y"]) + " " + str(pet_param_dict["eye_right_x"]) + " " + str(pet_param_dict["eye_right_y"]) + " " + str(pet_param_dict["eye_left_x"]) + " " + str(pet_param_dict["eye_left_y"]) + " " + str(pet_param_dict["nose_x"]) + " " + str(pet_param_dict["nose_y"])],shell=True)
+                res = subprocess.check_output(["python ./crazyPetsApp/scripts/predict.py " + str(pet_param_dict["eye_left_x"]) + " " + str(pet_param_dict["eye_left_y"]) + " " + str(pet_param_dict["eye_right_x"]) + " " + str(pet_param_dict["eye_right_y"]) + " " + str(pet_param_dict["nose_x"]) + " " + str(pet_param_dict["nose_y"]) + " " + str(pet_param_dict["mouth_x"]) + " " + str(pet_param_dict["mouth_y"])],shell=True)
+                print("python ./crazyPetsApp/scripts/predict.py " + str(pet_param_dict["mouth_x"]) + " " + str(pet_param_dict["mouth_y"]) + " " + str(pet_param_dict["eye_right_x"]) + " " + str(pet_param_dict["eye_right_y"]) + " " + str(pet_param_dict["eye_left_x"]) + " " + str(pet_param_dict["eye_left_y"]) + " " + str(pet_param_dict["nose_x"]) + " " + str(pet_param_dict["nose_y"]))
                 res = res.decode("utf-8") # resはバイナリ形式なのでデコードする
-                print(res) # ここでは2を得る
+                #print(res) # ここでは2を得る
                 if (res < "2") :
                     score_str = "1"
                 else :
@@ -88,6 +118,8 @@ class PetViewSet(viewsets.ModelViewSet):
             if (len(score_dict) == 5) :
                 print("データ揃った")
                 break
+            print("今回のスコア:" + score_str)
+            print(str(len(score_dict)) + "個揃いました")
         
         return HttpResponse(json.dumps(pet_param_dict_list))
 
