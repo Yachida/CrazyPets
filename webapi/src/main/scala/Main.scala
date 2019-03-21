@@ -28,10 +28,10 @@ trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
 object Main extends JsonSupport {
 
   // 書き込み対象となるCSVファイルのパス
-  val CSV_FILE_PATH = "/tmp/crazypet.csv"
+  val CSV_FILE_PATH = sys.env.getOrElse("CSV_FILE_PATH", "/tmp/crazypet.csv")
 
   // ML-APIの読み出し用エンドポイント
-  val ML_ENDPOINT = "http://localhost:8000/pet"
+  val ML_ENDPOINT = sys.env.getOrElse("ML_ENDPOINT", "http://localhost:8000/pet")
 
   def main(args: Array[String]) = {
     implicit val system = ActorSystem("my-system")
