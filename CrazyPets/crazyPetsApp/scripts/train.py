@@ -27,12 +27,12 @@ def train_model(train: pd.DataFrame):
         valid_y = train['score'].iloc[val_idx]
         
         params = {
-            'num_leaves': 10,#これと
+            'num_leaves': 10,#これと 大きく
         }
         model = LGBMRegressor(#n_estimators=10000,
-                            n_estimators=100000,#これと
+                            n_estimators=10000,#これと 大きく
                             metric='rmse',
-                            learning_rate=0.001)#これと
+                            learning_rate=0.001)#これと 小さく
                             # learning_rate=0.001)
         model.fit(train_x, train_y,
                 eval_set=[(train_x, train_y), (valid_x, valid_y)],
