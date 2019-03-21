@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP" rel="stylesheet">
   <link href="./css/index.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script>
     function goHome() {
       location.href = 'home.html';
@@ -14,6 +15,16 @@
     function goTrain() {
       location.href = 'train.html';
     }
+
+    // データ取得
+    $.ajax({
+      url: 'http://crazy-pets.grouchydev.io/api',
+      type: 'GET'
+    }).done((data) => {
+      window.gotData = JSON.parse(data);
+    }).fail((e) => {
+      console.log('通信エラー', e)
+    })
   </script>
 </head>
 <body>
