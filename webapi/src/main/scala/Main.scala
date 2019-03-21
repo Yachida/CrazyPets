@@ -44,7 +44,7 @@ object Main extends JsonSupport {
     logger.info(s"ML_ENDPOINT: ${ML_ENDPOINT}")
 
     val route =
-      path("pet") {
+      path("api") {
         get {
           Try {
             val response = requests.get(ML_ENDPOINT)
@@ -56,7 +56,7 @@ object Main extends JsonSupport {
           }
         }
       } ~
-      path("pet") {
+      path("api") {
         post {
           entity(as[Seq[PetFace]]) { request =>
             Try {
