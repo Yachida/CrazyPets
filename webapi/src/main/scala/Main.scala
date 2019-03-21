@@ -8,6 +8,7 @@ import spray.json.DefaultJsonProtocol
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.event.Logging
 import spray.json._
+import scala.concurrent.duration._
 
 import scala.io.StdIn
 import com.github.tototoshi.csv._
@@ -46,14 +47,16 @@ object Main extends JsonSupport {
     val route =
       ignoreTrailingSlash {
         path("api") {
-          get {
-            Try {
-              val response = requests.get(ML_ENDPOINT)
-              val source = response.text
-              source.parseJson.convertTo[Seq[PetFace]]
-            } match {
-              case Success(petFaces) => complete(petFaces)
-              case Failure(e) => failWith(e)
+          withRequestTimeout(10.minutes) {
+            get {
+              Try {
+                val response = requests.get(ML_ENDPOINT)
+                val source = response.text
+                source.parseJson.convertTo[Seq[PetFace]]
+              } match {
+                case Success(petFaces) => complete(petFaces)
+                case Failure(e) => failWith(e)
+              }
             }
           }
         } ~
