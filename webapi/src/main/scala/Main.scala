@@ -44,34 +44,36 @@ object Main extends JsonSupport {
     logger.info(s"ML_ENDPOINT: ${ML_ENDPOINT}")
 
     val route =
-      path("api") {
-        get {
-          Try {
-            val response = requests.get(ML_ENDPOINT)
-            val source = response.text
-            source.parseJson.convertTo[Seq[PetFace]]
-          } match {
-            case Success(petFaces) => complete(petFaces)
-            case Failure(e) => failWith(e)
-          }
-        }
-      } ~
-      path("api") {
-        post {
-          entity(as[Seq[PetFace]]) { request =>
+      ignoreTrailingSlash {
+        path("api") {
+          get {
             Try {
-              val writer = CSVWriter.open(new File(CSV_FILE_PATH), append = true)
-              request.foreach(r => {
-                writer.writeRow(r.toList)
-                logger.info(s"CSV written: ${r.toList.toString}")
-              })
-              writer.close()
+              val response = requests.get(ML_ENDPOINT)
+              val source = response.text
+              source.parseJson.convertTo[Seq[PetFace]]
             } match {
-              case Success(_) => complete("ok")
+              case Success(petFaces) => complete(petFaces)
               case Failure(e) => failWith(e)
             }
           }
-        }
+        } ~
+          path("api") {
+            post {
+              entity(as[Seq[PetFace]]) { request =>
+                Try {
+                  val writer = CSVWriter.open(new File(CSV_FILE_PATH), append = true)
+                  request.foreach(r => {
+                    writer.writeRow(r.toList)
+                    logger.info(s"CSV written: ${r.toList.toString}")
+                  })
+                  writer.close()
+                } match {
+                  case Success(_) => complete("ok")
+                  case Failure(e) => failWith(e)
+                }
+              }
+            }
+          }
       }
 
 
