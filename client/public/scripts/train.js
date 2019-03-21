@@ -28,9 +28,7 @@ function renderTrain() {
         mockJson[selectedIndexes[3]],
         mockJson[selectedIndexes[4]]
       ]
-        .map((data, i) => {
-          return {...data, rank: 5 - i}
-        });
+        .map((data, i) => ({...data, rank: 5 - i}));
 
     console.log("send-data-content", dataForSend);
     $.ajax({
@@ -40,20 +38,15 @@ function renderTrain() {
       data: JSON.stringify(dataForSend)
     })
       .done(() => {
-        console.log('送信完了！')
+        console.log('送信完了！');
+        const topIndex = selectedIndexes[0];
+        const topDataJson = JSON.stringify(mockJson[topIndex]);
+        localStorage.setItem('topData', topDataJson);
+        location.href = 'thanks.html';
       })
       .fail(() => {
         console.log('送信エラー！')
       });
-
-    const topIndex = selectedIndexes[0];
-
-    const topDataJson = JSON.stringify(mockJson[topIndex]);
-    localStorage.setItem('topData', topDataJson);
-
-    setTimeout(() => {
-      location.href = 'thanks.html';
-    }, 2000)
   }
 }
 
