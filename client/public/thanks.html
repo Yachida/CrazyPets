@@ -3,7 +3,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Cache-Control" content="no-cache">
   <meta charset="UTF-8">
-  <title>クリーチャーファーム</title>
+  <title>81バーチャルどうぶつえん</title>
   <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP" rel="stylesheet">
   <link href="./css/index.css" rel="stylesheet">
   <script>
@@ -23,7 +23,9 @@
 <body>
 <div class="header">
   <div class="header_container">
-    <div>クレイジーペット</div>
+    <div>
+      <img src="./img/logo.png" alt="">
+    </div>
     <div class="header_menu is-current" onclick="goTrain()">訓練場</div>
     <div class="header_menu" onclick="goHome()">おうち</div>
   </div>
@@ -33,14 +35,11 @@
   <div class="main_title">ぼくが1番かわいいんだね！！</div>
   <div id="container" class="cf">
   </div>
-  <div class="retryBtn"  onclick="goBack()">
+  <div class="retryBtn" onclick="goBack()">
     <div>もう一度訓練する</div>
   </div>
 </div>
 <script src="scripts/creature.js"></script>
 <script src="scripts/thanks.js"></script>
-<script>
-  document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')
-</script>
 </body>
 </html>

@@ -21,12 +21,7 @@ function renderHome() {
   })();
 
 
-
-
-
-  const targetJson =
-    window.gotData
-      .filter(data => data.score === targetRank)[0];
+  const targetJson = window.gotData.filter(data => data.score === targetRank)[0];
 
   const creature = !!targetJson ? CreatureDOM(targetJson) : document.createElement('div');
 
