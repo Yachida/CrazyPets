@@ -16,7 +16,13 @@ function renderTrain() {
   const trainDOMs = mockJson.map((data, index) => TrainDOM(data, index));
   trainDOMs.forEach(dom => document.getElementById('container').appendChild(dom));
 
+  // 全部選択完了した時の処理
   if (selectedIndexes.length === 5) {
+
+    const topIndex = selectedIndexes[0];
+    const dataJson = JSON.stringify(mockJson[topIndex]);
+    localStorage.setItem('topData', dataJson);
+
     setTimeout(() => {
       location.href = 'thanks.html';
     }, 1000)

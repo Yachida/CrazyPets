@@ -10,9 +10,11 @@
     function goHome() {
       location.href = 'home.html';
     }
+
     function goTrain() {
       location.href = 'train.html';
     }
+
     function goBack() {
       location.href = 'train.html';
     }
@@ -30,19 +32,13 @@
 <div class="main">
   <div class="main_title">ぼくが1番かわいいんだね！！</div>
   <div id="container" class="cf">
-    <div style="position: relative; cursor: pointer;"><img src="./img/base.png"><img
-        src="./img/eye_left.png" style="position: absolute; z-index: 2; left: 16.0118px; top: 130.815px;"><img
-        src="./img/eye_right.png" style="position: absolute; z-index: 2; left: 67.0862px; top: 164.765px;"><img
-        src="./img/nose.png" style="position: absolute; z-index: 2; left: 72.4628px; top: 178.48px;"><img
-        src="./img/mouth.png" style="position: absolute; z-index: 2; left: 63.2374px; top: 101.851px;">
-      <div class="lank_text" style="width: 100%; height: 60px; text-align: center; margin-top: -36px;"><span
-          style="display: none; font-size: 25px; font-weight: 900;"></span></div>
-    </div>
   </div>
-  <div class="retryBtn">
-    <div onclick="goBack()">もう一度訓練する</div>
+  <div class="retryBtn"  onclick="goBack()">
+    <div>もう一度訓練する</div>
   </div>
 </div>
+<script src="scripts/creature.js"></script>
+<script src="scripts/thanks.js"></script>
 <script>
   document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')
 </script>
