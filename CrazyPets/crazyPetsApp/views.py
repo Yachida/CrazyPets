@@ -38,11 +38,11 @@ class PetViewSet(viewsets.ModelViewSet):
             array_param_split = []
             line = f.readline()
         
-        array_param_split = array_param[int(random.uniform(1,len(array_param)))]
         pet_param_dict_list = list()
         score_dict = {}
         # while True:
         for i in range(30):
+            array_param_split = array_param[int(random.uniform(1,len(array_param)))]
             if ("5" not in score_dict) :
                 pet_param_dict = {
                     "mouth_x" : random.uniform(float(array_param_split[6]) - 0.01 , float(array_param_split[6]) + 0.01),
@@ -94,7 +94,7 @@ class PetViewSet(viewsets.ModelViewSet):
             # pythonファイルを叩く
             try:
                 # res = subprocess.check_output(["python ./crazyPetsApp/scripts/predict.py " + str(pet_param_dict["mouth_x"]) + " " + str(pet_param_dict["mouth_y"]) + " " + str(pet_param_dict["eye_right_x"]) + " " + str(pet_param_dict["eye_right_y"]) + " " + str(pet_param_dict["eye_left_x"]) + " " + str(pet_param_dict["eye_left_y"]) + " " + str(pet_param_dict["nose_x"]) + " " + str(pet_param_dict["nose_y"])],shell=True)
-                res = subprocess.check_output(["python ./crazyPetsApp/scripts/predict.py " + str(pet_param_dict["eye_left_x"]) + " " + str(pet_param_dict["eye_left_y"]) + " " + str(pet_param_dict["eye_right_x"]) + " " + str(pet_param_dict["eye_right_y"]) + " " + str(pet_param_dict["nose_x"]) + " " + str(pet_param_dict["nose_y"]) + " " + str(pet_param_dict["mouth_x"]) + " " + str(pet_param_dict["mouth_y"])],shell=True)
+                res = subprocess.check_output(["python3.6 ./crazyPetsApp/scripts/predict.py " + str(pet_param_dict["eye_left_x"]) + " " + str(pet_param_dict["eye_left_y"]) + " " + str(pet_param_dict["eye_right_x"]) + " " + str(pet_param_dict["eye_right_y"]) + " " + str(pet_param_dict["nose_x"]) + " " + str(pet_param_dict["nose_y"]) + " " + str(pet_param_dict["mouth_x"]) + " " + str(pet_param_dict["mouth_y"])],shell=True)
                 print("python ./crazyPetsApp/scripts/predict.py " + str(pet_param_dict["mouth_x"]) + " " + str(pet_param_dict["mouth_y"]) + " " + str(pet_param_dict["eye_right_x"]) + " " + str(pet_param_dict["eye_right_y"]) + " " + str(pet_param_dict["eye_left_x"]) + " " + str(pet_param_dict["eye_left_y"]) + " " + str(pet_param_dict["nose_x"]) + " " + str(pet_param_dict["nose_y"]))
                 res = res.decode("utf-8") # resはバイナリ形式なのでデコードする
                 #print(res) # ここでは2を得る
@@ -114,12 +114,14 @@ class PetViewSet(viewsets.ModelViewSet):
                 print(score_str)
                 score_dict[score_str] = score_str
                 pet_param_dict_list.append(pet_param_dict)
+
+            print("今回のスコア:" + score_str)
+            print(str(len(score_dict)) + "個揃いました")
             
             if (len(score_dict) == 5) :
                 print("データ揃った")
                 break
-            print("今回のスコア:" + score_str)
-            print(str(len(score_dict)) + "個揃いました")
+            
         
         return HttpResponse(json.dumps(pet_param_dict_list))
 
