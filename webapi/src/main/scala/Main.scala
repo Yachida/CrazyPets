@@ -50,7 +50,7 @@ object Main extends JsonSupport {
           withRequestTimeout(10.minutes) {
             get {
               Try {
-                val response = requests.get(ML_ENDPOINT)
+                val response = requests.get(ML_ENDPOINT, readTimeout = 10.minutes.toMillis.toInt, connectTimeout = 10.minutes.toMillis.toInt)
                 val source = response.text
                 source.parseJson.convertTo[Seq[PetFace]]
               } match {
