@@ -1,7 +1,7 @@
 import subprocess
 
 try:
-    subprocess.check_output(["python ./scripts/train.py"],shell=True)
+    subprocess.check_output(["python3.6 ./scripts/train.py"],shell=True)
 except:
     print("エラー")
     exit()
