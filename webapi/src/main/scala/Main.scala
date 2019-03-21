@@ -16,7 +16,7 @@ import com.github.tototoshi.csv._
 import scala.util.{Failure, Success, Try}
 
 case class PetFace(eye_left_x: Float, eye_left_y: Float, eye_right_x: Float, eye_right_y: Float,
-                   nose_x: Float, nose_y: Float, mouth_x: Float, mouth_y: Float, score: Float) {
+                   nose_x: Float, nose_y: Float, mouth_x: Float, mouth_y: Float, score: Int) {
   def toList = {
     List(eye_left_x, eye_left_y, eye_right_x, eye_right_y, nose_x, nose_y, mouth_x, mouth_y, score)
   }
