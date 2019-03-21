@@ -31,7 +31,25 @@ function outputMockJson() {
 /* ======== CSV ========*/
 
 function outputCSV() {
-  const columns = () => new Array(8).fill(0).map(() => Math.random()).join(",");
+  const columns = () => new Array(8).fill(0).map((_, i) => {
+    if (i === 0) {
+      return Math.random() / 2
+    } else if (i === 1) {
+      return Math.random() / 2
+    } else if (i === 2) {
+      return Math.random() / 2 + 0.65
+    } else if (i === 3) {
+      return Math.random() / 2
+    } else if (i === 4) {
+      return Math.random() / 2 + 0.25
+    } else if (i === 5) {
+      return Math.random() / 2 + 0.25
+    } else if (i === 6) {
+      return Math.random() / 2 + 0.25
+    } else if (i === 7) {
+      return Math.random() / 3 + 0.7
+    }
+  }).join(",");
   const rows = new Array(300).fill(0).map(columns).join("\n");
   console.log(rows);
 }
