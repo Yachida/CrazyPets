@@ -8,7 +8,7 @@ from sklearn.metrics import mean_squared_error
 
 
 def get_data():
-    train = pd.read_csv('../input/train.csv')
+    train = pd.read_csv('./input/train.csv')
     # 4人のscoreの平均を取る
     train = train.groupby(
         [col for col in train.columns if not col == 'score'], as_index=False)[['score']].mean()
@@ -48,4 +48,4 @@ def train_model(train: pd.DataFrame):
 if __name__ == '__main__':
     train = get_data()
     models = train_model(train)
-    pickle.dump(models, open('../model/model.pkl', 'wb'))
+    pickle.dump(models, open('./model/model.pkl', 'wb'))
