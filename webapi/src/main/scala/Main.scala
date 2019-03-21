@@ -39,6 +39,10 @@ object Main extends JsonSupport {
     implicit val executionContext = system.dispatcher
     val logger = Logging(system, getClass)
 
+
+    logger.info(s"CSV_FILE_PATH: ${CSV_FILE_PATH}")
+    logger.info(s"ML_ENDPOINT: ${ML_ENDPOINT}")
+
     val route =
       path("pet") {
         get {
