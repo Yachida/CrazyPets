@@ -7,19 +7,51 @@ let selectedIndexes = [];
 function renderTrain() {
   const oldContainer = document.getElementById('container');
   if (!!oldContainer) {
-    document.body.removeChild(oldContainer);
+    document.getElementsByClassName('main')[0].removeChild(oldContainer);
   }
   const container = document.createElement('div');
   container.id = 'container';
-  document.body.appendChild(container);
+  document.getElementsByClassName('main')[0].appendChild(container);
 
   const trainDOMs = mockJson.map((data, index) => TrainDOM(data, index));
   trainDOMs.forEach(dom => document.getElementById('container').appendChild(dom));
 
+  // 全部選択完了した時の処理
   if (selectedIndexes.length === 5) {
+
+    // データ送信
+    const dataForSend =
+      [
+        mockJson[selectedIndexes[0]],
+        mockJson[selectedIndexes[1]],
+        mockJson[selectedIndexes[2]],
+        mockJson[selectedIndexes[3]],
+        mockJson[selectedIndexes[4]]
+      ]
+        .map((data, i) => {
+          return {...data, rank: 5 - i}
+        });
+
+    $.ajax({
+      url: 'http://crazy-pets.grouchydev.io/api',
+      type: 'post',
+      data: dataForSend
+    })
+      .done(() => {
+        console.log('送信完了！')
+      })
+      .fail(() => {
+        console.log('送信エラー！')
+      });
+
+    const topIndex = selectedIndexes[0];
+
+    const topDataJson = JSON.stringify(mockJson[topIndex]);
+    localStorage.setItem('topData', topDataJson);
+
     setTimeout(() => {
       location.href = 'thanks.html';
-    }, 1000)
+    }, 100000)
   }
 }
 
@@ -29,7 +61,6 @@ function TrainDOM(data, index) {
 
   const container = document.createElement('div');
   container.style.position = 'relative';
-  container.style.float = 'left';
 
   const creatureDOM = CreatureDOM(data);
   creatureDOM.onclick = isSelected ? () => {
@@ -42,21 +73,28 @@ function TrainDOM(data, index) {
   effectArea.style.textAlign = 'center';
   effectArea.style.marginTop = '-36px';
 
+  const rankContainer = document.createElement('div');
+  rankContainer.className = 'lank_text';
+  rankContainer.style.width = '100%';
+  rankContainer.style.height = '60px';
+  rankContainer.style.textAlign = 'center';
+  rankContainer.style.marginTop = '-36px';
+
   const rankText = document.createElement('span');
   rankText.textContent =
     isSelected
       ? selectedIndexes
-      .map((selectedIndex, rankMinus1) => [selectedIndex, rankMinus1 + 1])
-      .filter(tuple => tuple[0] === index)
-      .map(([selectedIndex, rank]) => rank)[0] + '位'
+        .map((selectedIndex, rankMinus1) => [selectedIndex, rankMinus1 + 1])
+        .filter(tuple => tuple[0] === index)
+        .map(([selectedIndex, rank]) => rank)[0]
       : '';
-  rankText.style.display = isSelected ? 'block' : 'none';
-  rankText.style.fontSize = '25px';
-  rankText.style.fontWeight = '900';
+
+  // 表示/非表示
+  rankContainer.style.display = isSelected ? 'block' : 'none';
 
   container.appendChild(creatureDOM);
-  container.appendChild(effectArea);
-  effectArea.appendChild(rankText);
+  container.appendChild(rankContainer);
+  rankContainer.appendChild(rankText);
   return container;
 }
 
@@ -70,8 +108,16 @@ function onSelect(index) {
 
 
 /* ====== Main ====== */
+function main() {
+  if (!!window.gotData) {
+    renderTrain()
+  } else {
+    setTimeout(() => {
+      main();
+    }, 100);
+  }
+}
 
 window.addEventListener("load", () => {
-  // outputMockJson();
-  renderTrain();
+  main();
 });

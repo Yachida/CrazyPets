@@ -4,19 +4,41 @@
   <meta http-equiv="Cache-Control" content="no-cache">
   <meta charset="UTF-8">
   <title>クリーチャーファーム</title>
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP" rel="stylesheet">
+  <link href="./css/index.css" rel="stylesheet">
   <script>
+    function goHome() {
+      location.href = 'home.html';
+    }
+
+    function goTrain() {
+      location.href = 'train.html';
+    }
+
     function goBack() {
       location.href = 'train.html';
     }
   </script>
 </head>
 <body>
-<div>
-ありがとうございました!
+<div class="header">
+  <div class="header_container">
+    <div>クレイジーペット</div>
+    <div class="header_menu is-current" onclick="goTrain()">訓練場</div>
+    <div class="header_menu" onclick="goHome()">おうち</div>
+  </div>
 </div>
-<button onclick="goBack()">
-  もう一度訓練する
-</button>
+
+<div class="main">
+  <div class="main_title">ぼくが1番かわいいんだね！！</div>
+  <div id="container" class="cf">
+  </div>
+  <div class="retryBtn"  onclick="goBack()">
+    <div>もう一度訓練する</div>
+  </div>
+</div>
+<script src="scripts/creature.js"></script>
+<script src="scripts/thanks.js"></script>
 <script>
   document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')
 </script>

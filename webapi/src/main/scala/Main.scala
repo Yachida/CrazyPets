@@ -8,6 +8,7 @@ import spray.json.DefaultJsonProtocol
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.event.Logging
 import spray.json._
+import scala.concurrent.duration._
 
 import scala.io.StdIn
 import com.github.tototoshi.csv._
@@ -28,10 +29,10 @@ trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
 object Main extends JsonSupport {
 
   // 書き込み対象となるCSVファイルのパス
-  val CSV_FILE_PATH = "/tmp/crazypet.csv"
+  val CSV_FILE_PATH = sys.env.getOrElse("CSV_FILE_PATH", "/tmp/crazypet.csv")
 
   // ML-APIの読み出し用エンドポイント
-  val ML_ENDPOINT = "http://localhost:8000/pet"
+  val ML_ENDPOINT = sys.env.getOrElse("ML_ENDPOINT", "http://localhost:8000/pet")
 
   def main(args: Array[String]) = {
     implicit val system = ActorSystem("my-system")
@@ -39,35 +40,43 @@ object Main extends JsonSupport {
     implicit val executionContext = system.dispatcher
     val logger = Logging(system, getClass)
 
+
+    logger.info(s"CSV_FILE_PATH: ${CSV_FILE_PATH}")
+    logger.info(s"ML_ENDPOINT: ${ML_ENDPOINT}")
+
     val route =
-      path("pet") {
-        get {
-          Try {
-            val response = requests.get(ML_ENDPOINT)
-            val source = response.text
-            source.parseJson.convertTo[Seq[PetFace]]
-          } match {
-            case Success(petFaces) => complete(petFaces)
-            case Failure(e) => failWith(e)
-          }
-        }
-      } ~
-      path("pet") {
-        post {
-          entity(as[Seq[PetFace]]) { request =>
-            Try {
-              val writer = CSVWriter.open(new File(CSV_FILE_PATH), append = true)
-              request.foreach(r => {
-                writer.writeRow(r.toList)
-                logger.info(s"CSV written: ${r.toList.toString}")
-              })
-              writer.close()
-            } match {
-              case Success(_) => complete("ok")
-              case Failure(e) => failWith(e)
+      ignoreTrailingSlash {
+        path("api") {
+          withRequestTimeout(10.minutes) {
+            get {
+              Try {
+                val response = requests.get(ML_ENDPOINT)
+                val source = response.text
+                source.parseJson.convertTo[Seq[PetFace]]
+              } match {
+                case Success(petFaces) => complete(petFaces)
+                case Failure(e) => failWith(e)
+              }
             }
           }
-        }
+        } ~
+          path("api") {
+            post {
+              entity(as[Seq[PetFace]]) { request =>
+                Try {
+                  val writer = CSVWriter.open(new File(CSV_FILE_PATH), append = true)
+                  request.foreach(r => {
+                    writer.writeRow(r.toList)
+                    logger.info(s"CSV written: ${r.toList.toString}")
+                  })
+                  writer.close()
+                } match {
+                  case Success(_) => complete("ok")
+                  case Failure(e) => failWith(e)
+                }
+              }
+            }
+          }
       }
 
 
