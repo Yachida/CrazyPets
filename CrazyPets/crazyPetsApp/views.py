@@ -65,7 +65,7 @@ class PetViewSet(viewsets.ModelViewSet):
 
             # pythonファイルを叩く
             try:
-                res = subprocess.check_output(["python ./crazyPetsApp/scripts/predict.py " + str(pet_param_dict["mouth_x"]) + " " + str(pet_param_dict["mouth_y"]) + " " + str(pet_param_dict["eye_right_x"]) + " " + str(pet_param_dict["eye_right_y"]) + " " + str(pet_param_dict["eye_left_x"]) + " " + str(pet_param_dict["eye_left_y"]) + " " + str(pet_param_dict["nose_x"]) + " " + str(pet_param_dict["nose_y"])],shell=True)
+                res = subprocess.check_output(["python3.6 ./crazyPetsApp/scripts/predict.py " + str(pet_param_dict["mouth_x"]) + " " + str(pet_param_dict["mouth_y"]) + " " + str(pet_param_dict["eye_right_x"]) + " " + str(pet_param_dict["eye_right_y"]) + " " + str(pet_param_dict["eye_left_x"]) + " " + str(pet_param_dict["eye_left_y"]) + " " + str(pet_param_dict["nose_x"]) + " " + str(pet_param_dict["nose_y"])],shell=True)
                 res = res.decode("utf-8") # resはバイナリ形式なのでデコードする
                 print(res) # ここでは2を得る
                 if (res < "2") :
