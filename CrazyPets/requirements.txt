@@ -9,7 +9,7 @@ django-filter==2.1.0
 djangorestframework==3.9.2
 idna==2.8
 lightgbm==2.2.3
-numpy==1.16.2
+numpy==1.22.0
 pandas==0.24.2
 pycosat==0.6.3
 pycparser==2.19
